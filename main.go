@@ -6,13 +6,10 @@ import (
 
 	router "github.com/DevitoDbug/golangAuthTemplate/routes"
 	"github.com/DevitoDbug/golangAuthTemplate/utils"
-	"github.com/go-playground/validator/v10"
 )
 
-var Validate *validator.Validate
-
 func main() {
-	Validate = validator.New(validator.WithRequiredStructEnabled())
+	utils.Init()
 
 	port := ":8080"
 	var appRouter http.HandlerFunc = router.Router
@@ -24,7 +21,6 @@ func main() {
 			Value:   err.Error(),
 		}
 
-		log.Printf("Error listening to the port\n %s ", errorContext.Error())
+		log.Fatalf("Error listening to the port\n %s ", errorContext.Error())
 	}
-
 }

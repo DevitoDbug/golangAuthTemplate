@@ -39,5 +39,7 @@ func Router(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Bad request", http.StatusBadRequest)
 		}
 
+	default:
+		http.Error(w, "Not found", http.StatusNotFound)
 	}
 }

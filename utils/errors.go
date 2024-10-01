@@ -1,12 +1,14 @@
 package utils
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type ErrorContext struct {
-	Context string 
-	Value string 
+	Context string
+	Value   string
 }
 
 func (e *ErrorContext) Error() string {
-    return fmt.Sprintf("Context: %s, Value: %s", e.Context, e.Value)
+	return fmt.Sprintf("Context: %s, Value: %s", e.Context, e.Value)
 }

@@ -19,6 +19,24 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		}
 
 		log.Printf("Error during validation\n %s ", errorContext.Error())
+		http.Error(w, "Validation error", http.StatusBadRequest)
+	}
+
+	err = utils.Validate.Struct(user)
+	if err != nil {
+		errorContext := &utils.ErrorContext{
+			Context: "userController@CreateUser",
+			Value:   err.Error(),
+		}
+
+		w.Header().Set("content-type", "application/json")
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"errors": err.Error(),
+		})
+
+		log.Printf("Error during validation\n %s ", errorContext.Error())
+		return
 	}
 
 	err = user.Store()
@@ -29,6 +47,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		}
 
 		log.Printf("Error while storing user\n %s ", errorContext.Error())
+		http.Error(w, "Error while storing user", http.StatusInternalServerError)
 	}
 
 	w.Header().Set("content-type", "application/json")
@@ -36,9 +55,9 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShowUsers(w http.ResponseWriter, r *http.Request) {
-	var users []models.User
+	var users []models.ResponseUser
 	for _, user := range models.Storage {
-		users = append(users, user)
+		users = append(users, user.Show())
 	}
 
 	w.Header().Set("content-type", "application/json")
