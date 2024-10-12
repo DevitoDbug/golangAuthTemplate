@@ -9,8 +9,6 @@ import (
 )
 
 func main() {
-	utils.Init()
-
 	port := ":8080"
 	var appRouter http.HandlerFunc = router.Router
 	log.Printf("Starting server in port %s...", port)
